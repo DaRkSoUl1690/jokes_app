@@ -2,27 +2,34 @@ package com.vedant.jokes_app.model;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
+
+import static android.app.PendingIntent.getActivity;
+
 public class jokeManager {
+
+   Context mContext;
 
     SharedPreferences sharedPreferences;
 
     public jokeManager(Context context) {
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        mContext=context;
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
     }
 
-    public void saveJoke(Joke joke) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+       public void saveJoke(@NonNull Joke joke) {
+       SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(joke.getJokeText(), joke.isJokeLiked());
         editor.apply();
     }
 
-    public void deleteJoke(Joke joke) {
+    public void deleteJoke(@NonNull Joke joke) {
         if (sharedPreferences.contains(joke.getJokeText())) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.remove(joke.getJokeText()).apply();

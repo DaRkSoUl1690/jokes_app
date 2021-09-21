@@ -1,10 +1,12 @@
 package com.vedant.jokes_app;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
 
+import com.vedant.jokes_app.controllers.CardDataAdapter;
 import com.vedant.jokes_app.controllers.JokeLikeListener;
 import com.vedant.jokes_app.model.Joke;
 import com.vedant.jokes_app.model.jokeManager;
@@ -17,22 +19,25 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements CardStack.CardEventListener,JokeLikeListener {
+public class MainActivity extends AppCompatActivity implements CardStack.CardEventListener, JokeLikeListener {
 
     CardStack mCardStack;
     CardDataAdapter mCardAdapter;
     private final List<Joke> allJokes = new ArrayList<>();
     private jokeManager mJokeManager;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mCardStack = findViewById(R.id.container);
-
+        mJokeManager = new jokeManager(this);
         mCardStack = (CardStack) findViewById(R.id.container);
 
         mCardStack.setContentResource(R.layout.card_layout);
@@ -98,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements CardStack.CardEve
             byte[] buffer = new byte[size];
             is.read(buffer);
             is.close();
-            json = new String(buffer, "UTF-8");
+            json = new String(buffer, StandardCharsets.UTF_8);
         } catch (IOException ex) {
             ex.printStackTrace();
             return null;
@@ -120,12 +125,12 @@ public class MainActivity extends AppCompatActivity implements CardStack.CardEve
     }
 
     @Override
-    public void jokeIsLiked(Joke joke) {
+    public void jokeIsLiked(@NonNull Joke joke) {
 
 
         if (joke.isJokeLiked()) {
 
-            mJokeManager.saveJoke(joke);
+           mJokeManager.saveJoke(joke);
 
         } else {
 

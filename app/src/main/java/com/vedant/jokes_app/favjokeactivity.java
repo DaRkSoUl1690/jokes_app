@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.vedant.jokes_app.fragments.favjokesFragment;
 
+
 public class favjokeactivity extends AppCompatActivity {
 
     @Override
