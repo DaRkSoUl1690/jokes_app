@@ -1,7 +1,9 @@
 package com.vedant.jokes_app.controllers;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,15 +24,13 @@ public class CardDataAdapter extends ArrayAdapter<String> {
     private Joke mJoke;
 
     private final SharedPreferences mSharedPreferences;
-    private Context mContext;
-    private JokeLikeListener mJokeLikeListener;
+    private final JokeLikeListener mJokeLikeListener;
 
     public CardDataAdapter(@NonNull Context context, int resource) {
         super(context, resource);
-        mContext = context;
         mJokeLikeListener = (JokeLikeListener) context;
 
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
     }
 
@@ -74,6 +74,23 @@ public class CardDataAdapter extends ArrayAdapter<String> {
             }
         });
 
+        ImageButton shareButton = contentView.findViewById(R.id.shareButton);
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /*Create an ACTION_SEND Intent*/
+                Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+                /*This will be the actual content you wish you share.*/
+                String shareBody = v.getText().toString();
+                /*The type of the content is text, obviously.*/
+                intent.setType("text/plain");
+                /*Applying information Subject and Body.*/
+                intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Mama Joke!");
+                intent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+                /*Fire!*/
+                view.getContext().startActivity(Intent.createChooser(intent, "Share Via"));
+            }
+        });
 
         return contentView;
     }
